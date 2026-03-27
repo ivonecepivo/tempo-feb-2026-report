@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tempo Feb 2026 — Partner Offset</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#0f172a;--card:#1e293b;--border:#334155;--text:#e2e8f0;--muted:#94a3b8;--accent:#38bdf8;--green:#22c55e;--amber:#f59e0b;--red:#ef4444}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);padding:24px}
+h1{font-size:1.5rem;margin-bottom:4px}
+.sub{color:var(--muted);font-size:.875rem;margin-bottom:24px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
+.card h2{font-size:1rem;margin-bottom:12px;color:var(--accent)}
+.full{grid-column:1/-1}
+.cw{position:relative;width:100%}
+.kpi-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;flex:1;min-width:150px}
+.kpi .l{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.kpi .v{font-size:1.6rem;font-weight:700;margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--border)}
+th{color:var(--muted);font-weight:600;font-size:.75rem;text-transform:uppercase}
+td.n{text-align:right;font-variant-numeric:tabular-nums}
+.tg{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:600}
+.tg.y{background:#166534;color:#bbf7d0}
+.tg.m{background:#854d0e;color:#fef08a}
+.tg.n{background:#991b1b;color:#fecaca}
+.note{font-size:.75rem;color:var(--muted);margin-top:10px}
+</style>
+</head>
+<body>
+<h1>Tempo Report — February 2026</h1>
+<p class="sub">Service Desk BO/CM · Partner Offset Analysis · 20 working days · Standby excluded</p>
+<div class="kpi-row">
+<div class="kpi"><div class="l">Team Logged (excl NWT/Standby)</div><div class="v" style="color:var(--accent)">745.75h</div></div>
+<div class="kpi"><div class="l">Partner Can Handle</div><div class="v" style="color:var(--green)" id="k1">—</div></div>
+<div class="kpi"><div class="l">Maybe (Incidents)</div><div class="v" style="color:var(--amber)" id="k2">—</div></div>
+<div class="kpi"><div class="l">Keep In-House</div><div class="v" style="color:var(--red)" id="k3">—</div></div>
+</div>
+<div class="grid">
+<div class="card full">
+<h2>Hours by Work Type per Team Member</h2>
+<div class="cw" style="height:500px"><canvas id="c1"></canvas></div>
+<p class="note">Ivo SDA-6 reduced by 20h (→ Cognizant training). Incidents always = Maybe. Standby 232h excluded.</p>
+</div>
+<div class="card">
+<h2>Partner Offset Potential</h2>
+<div class="cw" style="height:320px"><canvas id="c2"></canvas></div>
+</div>
+<div class="card">
+<h2>SCCDESK Ticket Type Distribution</h2>
+<div class="cw" style="height:320px"><canvas id="c3"></canvas></div>
+</div>
+<div class="card full">
+<h2>Shareable Breakdown per Member</h2>
+<div class="cw" style="height:300px"><canvas id="c4"></canvas></div>
+</div>
+<div class="card full">
+<h2>Detailed Breakdown by Member</h2>
+<table>
+<thead><tr><th>Member</th><th>Project</th><th>RFC</th><th>RFI</th><th>Data Req</th><th>Incident</th><th>Finding</th><th>Consultancy</th><th>SDA-6</th><th>Overhead</th><th>Internal</th><th>Cognizant</th><th>Total</th><th>Yes</th><th>Maybe</th><th>No</th></tr></thead>
+<tbody id="tb1"></tbody>
+</table>
+</div>
+<div class="card full">
+<h2>SCCDESK Ticket Categorisation</h2>
+<table>
+<thead><tr><th>Member</th><th>Key</th><th>Category</th><th style="text-align:right">Hours</th><th>Shareable</th><th>Description</th></tr></thead>
+<tbody id="tb2"></tbody>
+</table>
+</div>
+</div>
+<script>
+const M=['Alexandra','Ivo','Marc','Naomi','Tamara'];
+const D={
+Alexandra:{Project:{y:59.25,n:33,m:0},RFC:{y:2.25,n:10.25,m:0},RFI:{y:0,n:0,m:0},DR:{y:0,n:13.75,m:0},Incident:{y:0,n:0,m:0.75},Finding:{y:0,n:0,m:0},Consult:{y:0,n:0,m:0},SDA6:{y:0,n:0,m:0},Overhead:{y:0,n:33.75,m:0},Internal:{y:0,n:0,m:0},Cognizant:{y:0,n:0,m:0}},
+Ivo:{Project:{y:0,n:0,m:0},RFC:{y:2.75,n:0,m:0},RFI:{y:0,n:2.25,m:0},DR:{y:0,n:5.25,m:0},Incident:{y:0,n:0,m:2.5},Finding:{y:7,n:2,m:0},Consult:{y:0,n:9,m:0},SDA6:{y:0,n:87,m:0},Overhead:{y:0,n:2.25,m:0},Internal:{y:0,n:7.25,m:0},Cognizant:{y:20,n:0,m:0}},
+Marc:{Project:{y:0,n:0,m:0},RFC:{y:0,n:14.25,m:0.5},RFI:{y:0,n:2,m:0},DR:{y:0,n:7.25,m:0},Incident:{y:0,n:0,m:5},Finding:{y:0,n:1.5,m:0},Consult:{y:0,n:109,m:0},SDA6:{y:0,n:0,m:0},Overhead:{y:0,n:10,m:0},Internal:{y:0,n:0,m:0},Cognizant:{y:0,n:0,m:0}},
+Naomi:{Project:{y:0,n:0,m:0},RFC:{y:4.5,n:18.25,m:0},RFI:{y:0,n:0,m:0},DR:{y:0,n:6.75,m:0},Incident:{y:0,n:0,m:0},Finding:{y:0,n:0,m:0},Consult:{y:0,n:21,m:0},SDA6:{y:0,n:32.25,m:0},Overhead:{y:0,n:77.25,m:0},Internal:{y:0,n:0,m:0},Cognizant:{y:0,n:0,m:0}},
+Tamara:{Project:{y:0,n:0,m:0},RFC:{y:2.75,n:6.25,m:0},RFI:{y:0,n:0,m:0},DR:{y:0.5,n:36,m:0},Incident:{y:0,n:0,m:0},Finding:{y:0,n:0,m:0},Consult:{y:0,n:0,m:0},SDA6:{y:0,n:60.25,m:0},Overhead:{y:0,n:30.25,m:0},Internal:{y:0,n:0,m:0},Cognizant:{y:0,n:0,m:0}}};
+const cats=['Project','RFC','RFI','DR','Incident','Finding','Consult','SDA6','Overhead','Internal','Cognizant'];
+const catLabels=['Project','RFC','RFI','Data Request','Incident','Finding','Consultancy','Service Desk','Overhead','Internal','Cognizant Training'];
+const catColors=['#6366f1','#22c55e','#a78bfa','#f97316','#ef4444','#dc2626','#0ea5e9','#64748b','#475569','#334155','#10b981'];
+let totalY=0,totalM=0,totalN=0;
+M.forEach(m=>{cats.forEach(c=>{const v=D[m][c];totalY+=v.y;totalM+=v.m;totalN+=v.n})});
+document.getElementById('k1').textContent=totalY.toFixed(1)+'h';
+document.getElementById('k2').textContent=totalM.toFixed(1)+'h';
+document.getElementById('k3').textContent=totalN.toFixed(1)+'h';
+const ds1=cats.map((c,i)=>({label:catLabels[i],data:M.map(m=>+(D[m][c].y+D[m][c].n+D[m][c].m).toFixed(2)),backgroundColor:catColors[i],borderRadius:3}));
+new Chart(document.getElementById('c1'),{type:'bar',data:{labels:M,datasets:ds1},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8',font:{size:11}}},tooltip:{callbacks:{label:ctx=>{const c=cats[ctx.datasetIndex],m=M[ctx.dataIndex],v=D[m][c];return catLabels[ctx.datasetIndex]+': '+ctx.parsed.y+'h (Yes:'+v.y+' No:'+v.n+' Maybe:'+v.m+')'}}}},scales:{x:{stacked:true,ticks:{color:'#94a3b8'},grid:{color:'#1e293b'}},y:{stacked:true,ticks:{color:'#94a3b8',callback:v=>v+'h'},grid:{color:'#334155'},title:{display:true,text:'Hours',color:'#94a3b8'}}}}});
+new Chart(document.getElementById('c2'),{type:'doughnut',data:{labels:['Partner (Yes)','Maybe (Incidents)','In-House (No)'],datasets:[{data:[totalY,totalM,totalN],backgroundColor:['#22c55e','#f59e0b','#ef4444'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#94a3b8',font:{size:11},padding:12}},tooltip:{callbacks:{label:ctx=>{const t=totalY+totalM+totalN;return ctx.label+': '+ctx.parsed.toFixed(1)+'h ('+(ctx.parsed/t*100).toFixed(1)+'%)'}}}}}});
+const tktTypes=['RFC','RFI','DR','Incident','Finding'];
+const tktLabels=['RFC','RFI','Data Request','Incident','Finding'];
+const tktColors=['#22c55e','#a78bfa','#f97316','#ef4444','#dc2626'];
+const tktTotals=tktTypes.map(t=>{let s=0;M.forEach(m=>{const v=D[m][t];s+=v.y+v.n+v.m});return +s.toFixed(2)});
+new Chart(document.getElementById('c3'),{type:'doughnut',data:{labels:tktLabels,datasets:[{data:tktTotals,backgroundColor:tktColors,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#94a3b8',font:{size:11},padding:12}},tooltip:{callbacks:{label:ctx=>ctx.label+': '+ctx.parsed.toFixed(1)+'h'}}}}});
+new Chart(document.getElementById('c4'),{type:'bar',data:{labels:M,datasets:[{label:'Partner (Yes)',data:M.map(m=>{let s=0;cats.forEach(c=>s+=D[m][c].y);return +s.toFixed(2)}),backgroundColor:'#22c55e',borderRadius:3},{label:'Maybe',data:M.map(m=>{let s=0;cats.forEach(c=>s+=D[m][c].m);return +s.toFixed(2)}),backgroundColor:'#f59e0b',borderRadius:3},{label:'In-House (No)',data:M.map(m=>{let s=0;cats.forEach(c=>s+=D[m][c].n);return +s.toFixed(2)}),backgroundColor:'#ef4444',borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8',font:{size:11}}}},scales:{x:{ticks:{color:'#94a3b8'},grid:{color:'#1e293b'}},y:{ticks:{color:'#94a3b8',callback:v=>v+'h'},grid:{color:'#334155'}}}}});
+const tb1=document.getElementById('tb1');
+M.forEach(m=>{const d=D[m];let ty=0,tm=0,tn=0,tot=0;cats.forEach(c=>{ty+=d[c].y;tm+=d[c].m;tn+=d[c].n;tot+=d[c].y+d[c].n+d[c].m});const r=document.createElement('tr');r.innerHTML='<td><strong>'+m+'</strong></td>'+cats.map(c=>{const v=d[c].y+d[c].n+d[c].m;return'<td class="n">'+(v>0?v.toFixed(1)+'h':'—')+'</td>'}).join('')+'<td class="n"><strong>'+tot.toFixed(1)+'h</strong></td><td class="n"><span class="tg y">'+ty.toFixed(1)+'h</span></td><td class="n"><span class="tg m">'+tm.toFixed(1)+'h</span></td><td class="n"><span class="tg n">'+tn.toFixed(1)+'h</span></td>';tb1.appendChild(r)});
+const tr=document.createElement('tr');tr.style.fontWeight='700';let gt=[],gy=0,gm=0,gn=0;cats.forEach(c=>{let s=0;M.forEach(m=>s+=D[m][c].y+D[m][c].n+D[m][c].m);gt.push(s)});M.forEach(m=>cats.forEach(c=>{gy+=D[m][c].y;gm+=D[m][c].m;gn+=D[m][c].n}));tr.innerHTML='<td>TOTAL</td>'+gt.map(v=>'<td class="n">'+(v>0?v.toFixed(1)+'h':'—')+'</td>').join('')+'<td class="n">'+(gy+gm+gn).toFixed(1)+'h</td><td class="n"><span class="tg y">'+gy.toFixed(1)+'h</span></td><td class="n"><span class="tg m">'+gm.toFixed(1)+'h</span></td><td class="n"><span class="tg n">'+gn.toFixed(1)+'h</span></td>';tb1.appendChild(tr);
+const tickets=[{m:'Alexandra',k:'SCCDESK-48695',cat:'RFC',h:2.25,s:'Yes',d:'Add option Verkoop overbruggingspand to collection measure'},{m:'Alexandra',k:'SCCDESK-49081',cat:'RFC',h:1.75,s:'No',d:'Change contact person for Running Account 500'},{m:'Alexandra',k:'SCCDESK-50233',cat:'RFC',h:8.5,s:'No',d:'CM dossier should not be created when arrear below 10 euro'},{m:'Alexandra',k:'SCCDESK-49303',cat:'Data Request',h:2,s:'No',d:'Change mutation type 2026-01-08'},{m:'Alexandra',k:'SCCDESK-50591',cat:'Data Request',h:3,s:'No',d:'Set parties to preference letter'},{m:'Alexandra',k:'SCCDESK-50592',cat:'Data Request',h:8,s:'No',d:'Update portaluseraccount fields'},{m:'Alexandra',k:'SCCDESK-51043',cat:'Data Request',h:0.75,s:'No',d:'Change economical owner for loan'},{m:'Alexandra',k:'SCCDESK-51894',cat:'Incident',h:0.75,s:'Maybe',d:'ICR DSCR cannot be calculated'},{m:'Ivo',k:'SCCDESK-48695',cat:'RFC',h:1.75,s:'Yes',d:'Add option Verkoop overbruggingspand to collection measure'},{m:'Ivo',k:'SCCDESK-45861',cat:'RFC',h:1,s:'Yes',d:'Configure and adjust processes/events CM'},{m:'Ivo',k:'SCCDESK-50471',cat:'RFI',h:2.25,s:'No',d:'Questions related to mutation on combination loan'},{m:'Ivo',k:'SCCDESK-50347',cat:'Data Request',h:1,s:'No',d:'TINKA - 485 Loans write-off'},{m:'Ivo',k:'SCCDESK-50694',cat:'Data Request',h:1,s:'No',d:'Data request financial closure February'},{m:'Ivo',k:'SCCDESK-50591',cat:'Data Request',h:0.75,s:'No',d:'Set parties to preference letter'},{m:'Ivo',k:'SCCDESK-50592',cat:'Data Request',h:0.75,s:'No',d:'Update portaluseraccount fields'},{m:'Ivo',k:'SCCDESK-51780',cat:'Data Request',h:0.5,s:'No',d:'TINKA - 177 Loans write-off'},{m:'Ivo',k:'SCCDESK-51090',cat:'Data Request',h:0.25,s:'No',d:'Collection measures not visible in file'},{m:'Ivo',k:'SCCDESK-29784',cat:'Data Request',h:1,s:'No',d:'Missing bookings AFAS'},{m:'Ivo',k:'SCCDESK-50006',cat:'Incident',h:2,s:'Maybe',d:'Direct debit not created with payment agreement'},{m:'Ivo',k:'SCCDESK-50094',cat:'Incident',h:0.5,s:'Maybe',d:'Slow performance Close CM'},{m:'Ivo',k:'SCCDESK-49143',cat:'Finding',h:7,s:'Yes',d:'Processflows in CM incorrect for collection measures'},{m:'Ivo',k:'SCCDESK-50767',cat:'Finding',h:2,s:'No',d:'Accounting scheme missing for migrate out transactions'},{m:'Marc',k:'SCCDESK-50322',cat:'RFC',h:11,s:'No',d:'Securitisation Jubilee Place 9'},{m:'Marc',k:'SCCDESK-50225',cat:'RFC',h:0.5,s:'No',d:'Renew API token AFAS ACC Bravo'},{m:'Marc',k:'SCCDESK-50891',cat:'RFC',h:0.5,s:'Maybe',d:'Prod: Accounting scheme missing for migrate out'},{m:'Marc',k:'SCCDESK-50041',cat:'RFC',h:0.75,s:'No',d:'Exclusions for Annual Overviews'},{m:'Marc',k:'SCCDESK-50915',cat:'RFC',h:1,s:'No',d:'Exclude business loans from Annual Overview'},{m:'Marc',k:'SCCDESK-46606',cat:'RFC',h:1,s:'No',d:'Enabling multi funder functionality'},{m:'Marc',k:'SCCDESK-47734',cat:'RFI',h:2,s:'No',d:'Transition plan'},{m:'Marc',k:'SCCDESK-50332',cat:'Data Request',h:0.5,s:'No',d:'MTT IBK admin history note (30/01)'},{m:'Marc',k:'SCCDESK-50567',cat:'Data Request',h:0.25,s:'No',d:'Retest annual statement'},{m:'Marc',k:'SCCDESK-50635',cat:'Data Request',h:2,s:'No',d:'Exclusions Annual Statements'},{m:'Marc',k:'SCCDESK-50648',cat:'Data Request',h:0.5,s:'No',d:'MTT IBK admin history note (06/02)'},{m:'Marc',k:'SCCDESK-50775',cat:'Data Request',h:1.5,s:'No',d:'TINKA - set bulk loans to collections'},{m:'Marc',k:'SCCDESK-50992',cat:'Data Request',h:1,s:'No',d:'MTT IBK admin history note (13/02)'},{m:'Marc',k:'SCCDESK-51760',cat:'Data Request',h:0.5,s:'No',d:'MTT IBK admin history note (20/02)'},{m:'Marc',k:'SCCDESK-49164',cat:'Data Request',h:0.25,s:'No',d:'Change subsidy role to Entitled Person'},{m:'Marc',k:'SCCDESK-50619',cat:'Data Request',h:0.5,s:'No',d:'Correct application reservation dossier'},{m:'Marc',k:'SCCDESK-51778',cat:'Data Request',h:0.25,s:'No',d:'Adjust term back to 77 months'},{m:'Marc',k:'SCCDESK-47846',cat:'Incident',h:1,s:'Maybe',d:'Missing TE15 transactions'},{m:'Marc',k:'SCCDESK-37356',cat:'Incident',h:4,s:'Maybe',d:'Prod: Mapping documents to Xtendis is wrong'},{m:'Marc',k:'SCCDESK-50767',cat:'Finding',h:1.5,s:'No',d:'Accounting scheme missing migrate out transactions'},{m:'Naomi',k:'SCCDESK-49882',cat:'RFC',h:1,s:'Yes',d:'Include batch Check Bonus Threshold to Intraday'},{m:'Naomi',k:'SCCDESK-50053',cat:'RFC',h:1,s:'Yes',d:'Adjustment of Dutch descriptions TxEL'},{m:'Naomi',k:'SCCDESK-44855',cat:'RFC',h:1.5,s:'Yes',d:'Adding templates in BO'},{m:'Naomi',k:'SCCDESK-50550',cat:'RFC',h:1,s:'Yes',d:'FDF letter wrong bankaccount'},{m:'Naomi',k:'SCCDESK-39053',cat:'RFC',h:3,s:'No',d:'Making Fee Payments from BO'},{m:'Naomi',k:'SCCDESK-50447',cat:'RFC',h:1,s:'No',d:'Change contact person running accounts'},{m:'Naomi',k:'SCCDESK-50633',cat:'RFC',h:0.5,s:'No',d:'April Mortgages Stress Rate Update'},{m:'Naomi',k:'SCCDESK-51033',cat:'RFC',h:1.5,s:'No',d:'April Mortgages rate change'},{m:'Naomi',k:'SCCDESK-51849',cat:'RFC',h:3,s:'No',d:'Collection tab function in BO'},{m:'Naomi',k:'SCCDESK-51934',cat:'RFC',h:2.5,s:'No',d:'Back Office - LTV Triggers'},{m:'Naomi',k:'SCCDESK-45234',cat:'RFC',h:4,s:'No',d:'BO Configuration work Oct/Nov 2025'},{m:'Naomi',k:'SCCDESK-46606',cat:'RFC',h:2.75,s:'No',d:'Enabling multi funder functionality'},{m:'Naomi',k:'SCCDESK-47836',cat:'Data Request',h:0.25,s:'No',d:'Re-open construction depot FDF'},{m:'Naomi',k:'SCCDESK-50591',cat:'Data Request',h:2,s:'No',d:'Set parties to preference letter'},{m:'Naomi',k:'SCCDESK-50592',cat:'Data Request',h:4,s:'No',d:'Update portaluseraccount fields'},{m:'Naomi',k:'SCCDESK-50604',cat:'Data Request',h:0.25,s:'No',d:'Urgent - payment split required'},{m:'Naomi',k:'SCCDESK-50612',cat:'Data Request',h:0.25,s:'No',d:'Urgent - funds applied as Payment Allocation'},{m:'Tamara',k:'SCCDESK-49030',cat:'RFC',h:1,s:'Yes',d:'Phasing out instrument Taxatierapport'},{m:'Tamara',k:'SCCDESK-49350',cat:'RFC',h:1.75,s:'Yes',d:'Make tab Klantoverzicht invisible for roles'},{m:'Tamara',k:'SCCDESK-50202',cat:'RFC',h:4.25,s:'No',d:'Enable designated events for publication'},{m:'Tamara',k:'SCCDESK-45028',cat:'RFC',h:2,s:'No',d:'Change interest rate adjustments for credit'},{m:'Tamara',k:'SCCDESK-48382',cat:'Data Request',h:0.5,s:'Yes',d:'Bank of England Base Rate Update to 3.75%'},{m:'Tamara',k:'SCCDESK-47683',cat:'Data Request',h:0.5,s:'No',d:'Merge dossiers van Gerwen'},{m:'Tamara',k:'SCCDESK-48932',cat:'Data Request',h:0.75,s:'No',d:'23-12 / 7107350'},{m:'Tamara',k:'SCCDESK-49164',cat:'Data Request',h:3.5,s:'No',d:'Change subsidy role to Entitled Person'},{m:'Tamara',k:'SCCDESK-49533',cat:'Data Request',h:1,s:'No',d:'Update Judicial Owner'},{m:'Tamara',k:'SCCDESK-49723',cat:'Data Request',h:0.5,s:'No',d:'Put 931 back in dirty payments'},{m:'Tamara',k:'SCCDESK-49764',cat:'Data Request',h:0.75,s:'No',d:'Remove bonus and due amount'},{m:'Tamara',k:'SCCDESK-49904',cat:'Data Request',h:1,s:'No',d:'Incorrect initiated, update dates'},{m:'Tamara',k:'SCCDESK-50011',cat:'Data Request',h:1,s:'No',d:'NESTR - Make collateral active'},{m:'Tamara',k:'SCCDESK-50125',cat:'Data Request',h:0.5,s:'No',d:'Update initial depot amount (INC2002374)'},{m:'Tamara',k:'SCCDESK-50160',cat:'Data Request',h:1,s:'No',d:'Incorrect initiated, update dates'},{m:'Tamara',k:'SCCDESK-50204',cat:'Data Request',h:2.75,s:'No',d:'Provide userprofilename / disable functionality'},{m:'Tamara',k:'SCCDESK-50207',cat:'Data Request',h:1,s:'No',d:'SBQ - Change Funder'},{m:'Tamara',k:'SCCDESK-50343',cat:'Data Request',h:0.5,s:'No',d:'NES - purchase price'},{m:'Tamara',k:'SCCDESK-50345',cat:'Data Request',h:0.5,s:'No',d:'SBQ - Change actual market value'},{m:'Tamara',k:'SCCDESK-50451',cat:'Data Request',h:0.5,s:'No',d:'Add Postal/Zip Code'},{m:'Tamara',k:'SCCDESK-50619',cat:'Data Request',h:3.75,s:'No',d:'Correct application reservation dossier'},{m:'Tamara',k:'SCCDESK-50622',cat:'Data Request',h:0.5,s:'No',d:'Change enddate participant agreement'},{m:'Tamara',k:'SCCDESK-50628',cat:'Data Request',h:0.75,s:'No',d:'Change role beneficiary to entitled'},{m:'Tamara',k:'SCCDESK-50643',cat:'Data Request',h:2,s:'No',d:'Adjust term to 77 months'},{m:'Tamara',k:'SCCDESK-50675',cat:'Data Request',h:0.5,s:'No',d:'Adjust loan rate revision date (INC2071160)'},{m:'Tamara',k:'SCCDESK-50737',cat:'Data Request',h:0.5,s:'No',d:'Clear bookdate'},{m:'Tamara',k:'SCCDESK-50794',cat:'Data Request',h:1.25,s:'No',d:'Incorrect initiated, update dates'},{m:'Tamara',k:'SCCDESK-50974',cat:'Data Request',h:1,s:'No',d:'Convert loan to another commercial product'},{m:'Tamara',k:'SCCDESK-50979',cat:'Data Request',h:1.25,s:'No',d:'Adjust valuation date'},{m:'Tamara',k:'SCCDESK-51019',cat:'Data Request',h:1.75,s:'No',d:'Reverse transaction outgoing payment'},{m:'Tamara',k:'SCCDESK-51043',cat:'Data Request',h:0.5,s:'No',d:'Change economical owner for loan'},{m:'Tamara',k:'SCCDESK-51049',cat:'Data Request',h:0.5,s:'No',d:'Update rate revision date (INC2078571)'},{m:'Tamara',k:'SCCDESK-51053',cat:'Data Request',h:0.5,s:'No',d:'Complete overview: permissions linked to roles'},{m:'Tamara',k:'SCCDESK-51059',cat:'Data Request',h:0.75,s:'No',d:'Specific field date change'},{m:'Tamara',k:'SCCDESK-51124',cat:'Data Request',h:0.5,s:'No',d:'Update product'},{m:'Tamara',k:'SCCDESK-51127',cat:'Data Request',h:0.75,s:'No',d:'Change IM for loan'},{m:'Tamara',k:'SCCDESK-51136',cat:'Data Request',h:0.75,s:'No',d:'Access request Close Config Portal'},{m:'Tamara',k:'SCCDESK-51778',cat:'Data Request',h:0.5,s:'No',d:'Adjust term to 77 months'},{m:'Tamara',k:'SCCDESK-48920',cat:'Data Request',h:0.75,s:'No',d:'Provide access to configuration portal'},{m:'Tamara',k:'SCCDESK-49705',cat:'Data Request',h:0.75,s:'No',d:'Remove access to CAM'},{m:'Tamara',k:'SCCDESK-49897',cat:'Data Request',h:0.25,s:'No',d:'Add rights Close Config Portal'},{m:'Tamara',k:'SCCDESK-51057',cat:'Data Request',h:0.5,s:'No',d:'Merge dossiers Pinas'}];
+const tb2=document.getElementById('tb2');const sclass={Yes:'y',Maybe:'m',No:'n'};tickets.forEach(t=>{const r=document.createElement('tr');if(t.cat==='Incident')r.style.backgroundColor='#422006';r.innerHTML='<td>'+t.m+'</td><td><code>'+t.k+'</code></td><td>'+t.cat+'</td><td class="n">'+t.h.toFixed(2)+'h</td><td><span class="tg '+sclass[t.s]+'">'+t.s+'</span></td><td style="font-size:.78rem;color:#94a3b8">'+t.d+'</td>';tb2.appendChild(r)});
+</script>
+</body>
+</html>
