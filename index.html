@@ -34,7 +34,7 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}
 <h1>Tempo Report — February 2026</h1>
 <p class="sub">Service Desk BO/CM · Partner Offset Analysis · 20 working days · Standby excluded</p>
 <div class="kpi-row">
-<div class="kpi"><div class="l">Team Logged (excl NWT/Standby)</div><div class="v" style="color:var(--accent)">745.75h</div></div>
+<div class="kpi"><div class="l">Team Logged (excl NWT/Standby)</div><div class="v" style="color:var(--accent)">725.75h</div></div>
 <div class="kpi"><div class="l">Partner Can Handle</div><div class="v" style="color:var(--green)" id="k1">—</div></div>
 <div class="kpi"><div class="l">Maybe (Incidents)</div><div class="v" style="color:var(--amber)" id="k2">—</div></div>
 <div class="kpi"><div class="l">Keep In-House</div><div class="v" style="color:var(--red)" id="k3">—</div></div>
@@ -43,7 +43,7 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}
 <div class="card full">
 <h2>Hours by Work Type per Team Member</h2>
 <div class="cw" style="height:500px"><canvas id="c1"></canvas></div>
-<p class="note">Ivo: 25h from Service Desk → Cognizant Training, 62h → Meetings. Naomi: 30h Overhead → Meetings. Tamara: 35h Service Desk → Meetings, 25.25h → Overhead. Incidents always = Maybe. Standby 232h excluded.</p>
+<p class="note">Ivo: 25h from Service Desk → Cognizant Training, 62h → Meetings. Naomi: 35h Overhead → Meetings. Tamara: 35h Service Desk → Meetings, 25.25h → Overhead. Incidents always = Maybe. Standby 232h excluded.</p>
 </div>
 <div class="card">
 <h2>Partner Offset Potential</h2>
@@ -76,9 +76,9 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}
 const M=['Alexandra','Ivo','Marc','Naomi','Tamara'];
 const D={
 Alexandra:{Project:{y:59.25,n:33,m:0},RFC:{y:2.25,n:10.25,m:0},RFI:{y:0,n:0,m:0},DR:{y:0,n:13.75,m:0},Incident:{y:0,n:0,m:0.75},Finding:{y:0,n:0,m:0},Consult:{y:0,n:0,m:0},SDA6:{y:0,n:0,m:0},Overhead:{y:0,n:33.75,m:0},Internal:{y:0,n:0,m:0},Cognizant:{y:0,n:0,m:0},Meetings:{y:0,n:0,m:0}},
-Ivo:{Project:{y:0,n:0,m:0},RFC:{y:2.75,n:0,m:0},RFI:{y:0,n:2.25,m:0},DR:{y:0,n:5.25,m:0},Incident:{y:0,n:0,m:2.5},Finding:{y:7,n:2,m:0},Consult:{y:0,n:9,m:0},SDA6:{y:0,n:0,m:0},Overhead:{y:0,n:2.25,m:0},Internal:{y:0,n:7.25,m:0},Cognizant:{y:45,n:0,m:0},Meetings:{y:0,n:62,m:0}},
+Ivo:{Project:{y:0,n:0,m:0},RFC:{y:2.75,n:0,m:0},RFI:{y:0,n:2.25,m:0},DR:{y:0,n:5.25,m:0},Incident:{y:0,n:0,m:2.5},Finding:{y:7,n:2,m:0},Consult:{y:0,n:9,m:0},SDA6:{y:0,n:0,m:0},Overhead:{y:0,n:2.25,m:0},Internal:{y:0,n:7.25,m:0},Cognizant:{y:25,n:0,m:0},Meetings:{y:0,n:62,m:0}},
 Marc:{Project:{y:0,n:0,m:0},RFC:{y:0,n:14.25,m:0.5},RFI:{y:0,n:2,m:0},DR:{y:0,n:7.25,m:0},Incident:{y:0,n:0,m:5},Finding:{y:0,n:1.5,m:0},Consult:{y:0,n:109,m:0},SDA6:{y:0,n:0,m:0},Overhead:{y:0,n:10,m:0},Internal:{y:0,n:0,m:0},Cognizant:{y:0,n:0,m:0},Meetings:{y:0,n:0,m:0}},
-Naomi:{Project:{y:0,n:0,m:0},RFC:{y:4.5,n:18.25,m:0},RFI:{y:0,n:0,m:0},DR:{y:0,n:6.75,m:0},Incident:{y:0,n:0,m:0},Finding:{y:0,n:0,m:0},Consult:{y:0,n:21,m:0},SDA6:{y:0,n:32.25,m:0},Overhead:{y:0,n:47.25,m:0},Internal:{y:0,n:0,m:0},Cognizant:{y:0,n:0,m:0},Meetings:{y:0,n:30,m:0}},
+Naomi:{Project:{y:0,n:0,m:0},RFC:{y:4.5,n:18.25,m:0},RFI:{y:0,n:0,m:0},DR:{y:0,n:6.75,m:0},Incident:{y:0,n:0,m:0},Finding:{y:0,n:0,m:0},Consult:{y:0,n:21,m:0},SDA6:{y:0,n:32.25,m:0},Overhead:{y:0,n:42.25,m:0},Internal:{y:0,n:0,m:0},Cognizant:{y:0,n:0,m:0},Meetings:{y:0,n:35,m:0}},
 Tamara:{Project:{y:0,n:0,m:0},RFC:{y:2.75,n:6.25,m:0},RFI:{y:0,n:0,m:0},DR:{y:0.5,n:36,m:0},Incident:{y:0,n:0,m:0},Finding:{y:0,n:0,m:0},Consult:{y:0,n:0,m:0},SDA6:{y:0,n:0,m:0},Overhead:{y:0,n:55.5,m:0},Internal:{y:0,n:0,m:0},Cognizant:{y:0,n:0,m:0},Meetings:{y:0,n:35,m:0}}};
 const cats=['Project','RFC','RFI','DR','Incident','Finding','Consult','SDA6','Overhead','Internal','Cognizant','Meetings'];
 const catLabels=['Project','RFC','RFI','Data Request','Incident','Finding','Consultancy','Service Desk','Overhead','Internal','Cognizant Training','Meetings'];
